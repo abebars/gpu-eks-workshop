@@ -2,7 +2,7 @@
 
 Companion repo for the hands-on workshop **"Engineering GPU Infrastructure for AI Workloads — a hands-on introduction to GPU inference serving on Amazon EKS"** by [Ahmed Bebars](https://abebars.io).
 
-**Attendee guide:** https://abebars.github.io/gpu-eks-workshop/
+**Attendee guide:** https://gpu-eks-workshop.abebars.io/
 
 In ~3.5 hours you take an EKS cluster from zero GPUs to serving a real LLM (vLLM + Qwen2.5-1.5B) on Karpenter-provisioned g5/g6 nodes, with GPU time-slicing, KEDA autoscaling and DCGM/Prometheus/Grafana observability. Inference only; no training.
 
@@ -35,7 +35,7 @@ make base-up              # ~20 min: VPC, EKS, Karpenter, monitoring, KEDA. No G
 make preflight
 ```
 
-Then follow the guide from [Module 1](https://abebars.github.io/gpu-eks-workshop/01-why-gpus-are-hard/). To rebuild everything unattended: `make workshop-up`. To tear down: `make workshop-down`.
+Then follow the guide from [Module 1](https://gpu-eks-workshop.abebars.io/01-why-gpus-are-hard/). To rebuild everything unattended: `make workshop-up`. To tear down: `make workshop-down`.
 
 ## Versions this was written against
 

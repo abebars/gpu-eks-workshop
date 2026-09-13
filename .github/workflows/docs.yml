@@ -5,9 +5,14 @@ on:
     paths: ["docs/**", "modules/**", "mkdocs.yml", "requirements.txt", ".github/workflows/docs.yml"]
   workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,7 +28,15 @@ jobs:
             mkdocs-material-
       - run: pip install -r requirements.txt
       - run: NO_MKDOCS_2_WARNING=1 mkdocs build --strict
-      - run: |
-          git config user.name github-actions[bot]
-          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          NO_MKDOCS_2_WARNING=1 mkdocs gh-deploy --force
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
