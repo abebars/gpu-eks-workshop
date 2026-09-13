@@ -2,7 +2,7 @@
 # Reverse order of the labs: workloads → GPU nodes → Operator. Base stack is
 # destroyed separately by `make base-down` (called from `make workshop-down`).
 set -uo pipefail
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/.." || exit
 kubectl delete -f modules/04-vllm/ --ignore-not-found
 kubectl delete -f modules/03-sharing/ --ignore-not-found
 kubectl delete -f modules/01-gpu-nodes/gpu-smoke.yaml --ignore-not-found

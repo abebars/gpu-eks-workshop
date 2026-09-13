@@ -1,4 +1,5 @@
 .workshop.env
+facilitator/
 site/
 terraform/.terraform/
 terraform/*.tfstate
