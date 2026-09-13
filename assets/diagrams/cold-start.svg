@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="440" viewBox="0 0 1200 440" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="14">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#9ca3af"/></marker></defs>
+<rect width="1200" height="440" fill="#ffffff"/>
+<text x="600" y="34" font-size="18" fill="#1f2937" font-weight="700" text-anchor="middle">Anatomy of a GPU cold start (new replica, no warm node)</text>
+<text x="486" y="88" font-size="12.5" fill="#1f2937" font-weight="600" text-anchor="end">Pod Pending → Karpenter decides</text>
+<rect x="500.0" y="70" width="15.0" height="26" rx="4" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+<text x="523.0" y="88" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="start">seconds</text>
+<text x="486" y="126" font-size="12.5" fill="#1f2937" font-weight="600" text-anchor="end">EC2 launch, AL2023 NVIDIA AMI boot, node joins</text>
+<rect x="515.0" y="108" width="135.0" height="26" rx="4" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+<text x="658.0" y="126" font-size="11" fill="#d97706" font-weight="normal" text-anchor="start">2–3 min</text>
+<text x="486" y="164" font-size="12.5" fill="#1f2937" font-weight="600" text-anchor="end">GPU Operator DaemonSets start, nvidia.com/gpu registers</text>
+<rect x="650.0" y="146" width="40.0" height="26" rx="4" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+<text x="698.0" y="164" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="start">30–60 s</text>
+<text x="486" y="202" font-size="12.5" fill="#1f2937" font-weight="600" text-anchor="end">Pull vllm/vllm-openai image (~9 GB compressed)</text>
+<rect x="690.0" y="184" width="210.0" height="26" rx="4" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+<text x="908.0" y="202" font-size="11" fill="#dc2626" font-weight="normal" text-anchor="start">3–5 min, EBS-throughput bound</text>
+<text x="486" y="240" font-size="12.5" fill="#1f2937" font-weight="600" text-anchor="end">Download model weights (3 GB from Hugging Face)</text>
+<rect x="900.0" y="222" width="70.0" height="26" rx="4" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+<text x="978.0" y="240" font-size="11" fill="#d97706" font-weight="normal" text-anchor="start">~1 min</text>
+<text x="486" y="278" font-size="12.5" fill="#1f2937" font-weight="600" text-anchor="end">vLLM init: weights → GPU, torch.compile, CUDA graphs</text>
+<rect x="970.0" y="260" width="90.0" height="26" rx="4" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+<text x="1068.0" y="278" font-size="11" fill="#2563eb" font-weight="normal" text-anchor="start">1–2 min</text>
+<text x="486" y="316" font-size="12.5" fill="#1f2937" font-weight="600" text-anchor="end">Ready — first request served</text>
+<rect x="1060.0" y="298" width="12.0" height="26" rx="4" fill="#ecfdf5" stroke="#059669" stroke-width="1.5"/>
+<text x="1080.0" y="316" font-size="11" fill="#059669" font-weight="normal" text-anchor="start">≈ 9–10 min total</text>
+<line x1="500" y1="344" x2="1100.0" y2="344" stroke="#9ca3af" stroke-width="1.5"/>
+<line x1="500.0" y1="344" x2="500.0" y2="350" stroke="#9ca3af" stroke-width="1.5"/>
+<text x="500.0" y="364" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="middle">0</text>
+<line x1="560.0" y1="344" x2="560.0" y2="350" stroke="#9ca3af" stroke-width="1.5"/>
+<text x="560.0" y="364" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="middle">1</text>
+<line x1="620.0" y1="344" x2="620.0" y2="350" stroke="#9ca3af" stroke-width="1.5"/>
+<text x="620.0" y="364" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="middle">2</text>
+<line x1="680.0" y1="344" x2="680.0" y2="350" stroke="#9ca3af" stroke-width="1.5"/>
+<text x="680.0" y="364" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="middle">3</text>
+<line x1="740.0" y1="344" x2="740.0" y2="350" stroke="#9ca3af" stroke-width="1.5"/>
+<text x="740.0" y="364" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="middle">4</text>
+<line x1="800.0" y1="344" x2="800.0" y2="350" stroke="#9ca3af" stroke-width="1.5"/>
+<text x="800.0" y="364" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="middle">5</text>
+<line x1="860.0" y1="344" x2="860.0" y2="350" stroke="#9ca3af" stroke-width="1.5"/>
+<text x="860.0" y="364" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="middle">6</text>
+<line x1="920.0" y1="344" x2="920.0" y2="350" stroke="#9ca3af" stroke-width="1.5"/>
+<text x="920.0" y="364" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="middle">7</text>
+<line x1="980.0" y1="344" x2="980.0" y2="350" stroke="#9ca3af" stroke-width="1.5"/>
+<text x="980.0" y="364" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="middle">8</text>
+<line x1="1040.0" y1="344" x2="1040.0" y2="350" stroke="#9ca3af" stroke-width="1.5"/>
+<text x="1040.0" y="364" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="middle">9</text>
+<line x1="1100.0" y1="344" x2="1100.0" y2="350" stroke="#9ca3af" stroke-width="1.5"/>
+<text x="1100.0" y="364" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="middle">10</text>
+<text x="800" y="380" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="middle">minutes since the pod went Pending</text>
+<text x="600" y="408" font-size="12" fill="#6b7280" font-weight="normal" text-anchor="middle">Levers, biggest first: warm the image (pre-pull DaemonSet, faster gp3 root volume, ECR pull-through cache),</text>
+<text x="600" y="425" font-size="12" fill="#6b7280" font-weight="normal" text-anchor="middle">keep weights off the critical path (PVC / S3 / bake into image), and keep one spare replica warm.</text>
+</svg>
