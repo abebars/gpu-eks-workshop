@@ -1,7 +1,7 @@
 site_name: Engineering GPU Infrastructure for AI Workloads
 site_description: A hands-on workshop — from zero GPUs to serving a real LLM on Amazon EKS with autoscaling, sharing and monitoring.
 site_author: Ahmed Bebars
-site_url: https://gpu-eks-workshop.abebars.io/
+site_url: https://gpu-eks-workshop.ahmedbebars.io/
 repo_url: https://github.com/abebars/gpu-eks-workshop
 repo_name: abebars/gpu-eks-workshop
 edit_uri: edit/main/docs/
