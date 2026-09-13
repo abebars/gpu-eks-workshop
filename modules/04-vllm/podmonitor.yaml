@@ -1,0 +1,18 @@
+# Tells the Prometheus Operator (from the base stack) to scrape every vLLM
+# pod's /metrics endpoint. PodMonitor (not ServiceMonitor) so each replica
+# is scraped individually, which is what you want for per-replica queue depth.
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: vllm
+  namespace: vllm
+  labels:
+    app: vllm
+spec:
+  selector:
+    matchLabels:
+      app: vllm
+  podMetricsEndpoints:
+    - port: http
+      path: /metrics
+      interval: 15s

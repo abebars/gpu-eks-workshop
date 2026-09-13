@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: k6-load
+  namespace: vllm
+spec:
+  backoffLimit: 0
+  ttlSecondsAfterFinished: 1800
+  template:
+    metadata:
+      labels:
+        app: k6-load
+    spec:
+      restartPolicy: Never
+      # No GPU toleration on purpose: the load generator must run on the
+      # CPU (system) nodes, never on the GPU it is testing.
+      containers:
+        - name: k6
+          image: grafana/k6:2.2.0
+          args: ["run", "/scripts/load.js"]
+          env:
+            - name: VUS
+              value: "24"
+            - name: DURATION
+              value: "15m"   # long enough for a cold GPU node to join and serve for a while
+          resources:
+            requests:
+              cpu: 500m
+              memory: 256Mi
+            limits:
+              memory: 1Gi
+          volumeMounts:
+            - name: script
+              mountPath: /scripts
+      volumes:
+        - name: script
+          configMap:
+            name: k6-load

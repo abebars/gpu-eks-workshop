@@ -1,0 +1,44 @@
+# Pre-pulls the vLLM image onto every GPU node so Lab 2 doesn't start with a
+# 9 GB download. This is a real production technique (image warmers), not a
+# workshop hack. Apply it at the START of Module 3 and forget about it.
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: vllm-image-prepull
+  labels:
+    app: vllm-image-prepull
+spec:
+  selector:
+    matchLabels:
+      app: vllm-image-prepull
+  template:
+    metadata:
+      labels:
+        app: vllm-image-prepull
+    spec:
+      nodeSelector:
+        karpenter.sh/nodepool: gpu
+      tolerations:
+        - key: nvidia.com/gpu
+          operator: Exists
+          effect: NoSchedule
+      # The init container's only job is to make kubelet pull the image.
+      initContainers:
+        - name: pull
+          image: vllm/vllm-openai:v0.28.0
+          command: ["true"]
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+      # A pause container keeps the pod (and therefore the pulled image's
+      # "in use" status) alive with near-zero cost.
+      containers:
+        - name: pause
+          image: registry.k8s.io/pause:3.10
+          resources:
+            requests:
+              cpu: 5m
+              memory: 8Mi
+            limits:
+              memory: 32Mi

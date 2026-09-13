@@ -1,0 +1,9 @@
+.workshop.env
+site/
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/.terraform.lock.hcl
+terraform/terraform.tfvars
+__pycache__/
+.DS_Store

@@ -1,0 +1,58 @@
+/* Workshop-guide touches on top of Material */
+:root {
+  --md-primary-fg-color: #0f766e;
+  --md-primary-fg-color--dark: #115e59;
+  --md-accent-fg-color: #059669;
+}
+
+/* Module metadata strip (level / time / cost) */
+.ws-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  padding: 0.6rem 0.9rem;
+  margin: 0 0 1.2rem 0;
+  border-left: 4px solid var(--md-accent-fg-color);
+  background: var(--md-code-bg-color);
+  border-radius: 0.2rem;
+  font-size: 0.8rem;
+}
+.ws-meta span strong { font-weight: 600; }
+
+/* "Expected output" blocks: dim them slightly so commands stand out */
+.ws-output > pre > code { opacity: 0.85; }
+
+/* Checkpoint callout */
+.md-typeset .admonition.checkpoint,
+.md-typeset details.checkpoint {
+  border-color: #dc2626;
+}
+.md-typeset .checkpoint > .admonition-title,
+.md-typeset .checkpoint > summary {
+  background-color: rgba(220, 38, 38, 0.1);
+}
+.md-typeset .checkpoint > .admonition-title::before,
+.md-typeset .checkpoint > summary::before {
+  background-color: #dc2626;
+  -webkit-mask-image: var(--md-admonition-icon--danger);
+          mask-image: var(--md-admonition-icon--danger);
+}
+
+/* Quirk callout: things that bite on EKS specifically */
+.md-typeset .admonition.quirk,
+.md-typeset details.quirk {
+  border-color: #d97706;
+}
+.md-typeset .quirk > .admonition-title,
+.md-typeset .quirk > summary {
+  background-color: rgba(217, 119, 6, 0.1);
+}
+.md-typeset .quirk > .admonition-title::before,
+.md-typeset .quirk > summary::before {
+  background-color: #d97706;
+  -webkit-mask-image: var(--md-admonition-icon--warning);
+          mask-image: var(--md-admonition-icon--warning);
+}
+
+.md-typeset img { border-radius: 0.3rem; }
+.md-typeset table:not([class]) { font-size: 0.75rem; }

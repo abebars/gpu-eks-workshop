@@ -1,0 +1,50 @@
+# NVIDIA GPU Operator values for Amazon EKS with the AL2023 NVIDIA-accelerated AMI.
+#
+# The EKS AL2023 NVIDIA AMI already ships the kernel driver AND the NVIDIA
+# Container Toolkit, and nodeadm configures containerd with "nvidia" as the
+# default runtime. So the Operator must NOT try to manage those two layers.
+# Letting it install a second driver on top of the AMI's driver is the #1
+# way to break GPU nodes on EKS.
+
+driver:
+  enabled: false        # driver comes from the AMI
+
+toolkit:
+  enabled: false        # container toolkit comes from the AMI
+
+# Since v25.10 the Operator defaults to Container Device Interface (CDI) mode,
+# which expects "nvidia" NOT to be the default containerd runtime. The EKS AMI
+# makes it the default. We stay on the well-trodden legacy path (device plugin
+# sets NVIDIA_VISIBLE_DEVICES, nvidia runtime injects the GPU) which is what
+# the AMI was built for.
+cdi:
+  enabled: false
+
+devicePlugin:
+  enabled: true
+  # No sharing config by default. Module 3 adds a ConfigMap and opts nodes
+  # in with the label nvidia.com/device-plugin.config=<key>.
+  config:
+    name: ""
+    default: ""
+
+gfd:
+  enabled: true         # GPU Feature Discovery: nvidia.com/gpu.product etc. node labels
+
+dcgmExporter:
+  enabled: true
+  serviceMonitor:
+    enabled: true       # picked up by kube-prometheus-stack from the base stack
+    interval: 15s
+
+migManager:
+  enabled: false        # A10G (g5) and L4 (g6) do not support MIG
+
+# Default tolerations already include {key: nvidia.com/gpu, operator: Exists,
+# effect: NoSchedule}, which matches the taint on our NodePool. Shown here so
+# nobody has to wonder how the DaemonSets land on tainted nodes.
+daemonsets:
+  tolerations:
+    - key: nvidia.com/gpu
+      operator: Exists
+      effect: NoSchedule

@@ -1,0 +1,28 @@
+name: validate
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  manifests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: kubeconform (incl. Karpenter, KEDA, Prometheus-Operator CRDs)
+        run: |
+          curl -sSL https://github.com/yannh/kubeconform/releases/latest/download/kubeconform-linux-amd64.tar.gz | tar xz
+          # 1.33 is the newest core schema set kubeconform's default store carries; CRDs come from the catalog below.
+          ./kubeconform -strict -summary -kubernetes-version 1.33.0 \
+            -schema-location default \
+            -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
+            modules/01-gpu-nodes/*.yaml modules/03-sharing/*.yaml modules/04-vllm/*.yaml modules/05-observability/*.yaml
+      - name: shellcheck
+        run: |
+          sudo apt-get install -y shellcheck >/dev/null
+          shellcheck -S warning scripts/*.sh
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - run: terraform -chdir=terraform init -backend=false && terraform -chdir=terraform validate

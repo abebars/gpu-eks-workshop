@@ -1,0 +1,67 @@
+# kube-prometheus-stack values for the GPU workshop base stack.
+# Rendered by Terraform (templatefile); ${grafana_admin_password} is substituted.
+
+alertmanager:
+  enabled: false # nothing to page in a workshop
+
+prometheus:
+  prometheusSpec:
+    # Discover every ServiceMonitor / PodMonitor in the cluster, regardless of
+    # labels. Without these two, the GPU Operator's dcgm-exporter ServiceMonitor
+    # and the vLLM PodMonitor (Lab 2) would be silently ignored, because they
+    # don't carry the release=kube-prometheus-stack label.
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    retention: 2d
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        memory: 3Gi
+
+grafana:
+  enabled: true
+  adminPassword: "${grafana_admin_password}"
+  defaultDashboardsEnabled: true
+  # The sidecar loads any ConfigMap labelled grafana_dashboard="1" from any
+  # namespace — that's how the vLLM dashboard arrives in Lab 2.
+  sidecar:
+    dashboards:
+      enabled: true
+      searchNamespace: ALL
+      folderAnnotation: grafana_folder
+      provider:
+        foldersFromFilesStructure: true
+  # Pre-import the NVIDIA DCGM Exporter dashboard from grafana.com (ID 12239).
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+        - name: gpu-workshop
+          orgId: 1
+          folder: GPU Workshop
+          type: file
+          disableDeletion: false
+          editable: true
+          options:
+            path: /var/lib/grafana/dashboards/gpu-workshop
+  dashboards:
+    gpu-workshop:
+      nvidia-dcgm-exporter:
+        gnetId: 12239
+        datasource: Prometheus
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+
+# Trim things the workshop doesn't look at.
+kubeControllerManager:
+  enabled: false
+kubeScheduler:
+  enabled: false
+kubeEtcd:
+  enabled: false
+kubeProxy:
+  enabled: false

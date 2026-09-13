@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vllm
+  namespace: vllm
+  labels:
+    app: vllm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vllm
+  # A model server takes minutes to become ready. Never take the old one
+  # down before the new one is serving.
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: vllm
+    spec:
+      # (1) Land on the GPU pool and nowhere else.
+      tolerations:
+        - key: nvidia.com/gpu
+          operator: Exists
+          effect: NoSchedule
+      nodeSelector:
+        karpenter.sh/nodepool: gpu
+      # Give vLLM time to finish in-flight requests when a node is drained.
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: vllm
+          image: vllm/vllm-openai:v0.28.0
+          # (2) The image's entrypoint is "vllm serve"; args are appended.
+          args:
+            - Qwen/Qwen2.5-1.5B-Instruct
+            - --served-model-name=qwen2.5-1.5b
+            - --max-model-len=4096
+            - --max-num-seqs=16
+            - --gpu-memory-utilization=0.90
+            - --port=8000
+          env:
+            - name: HF_HOME
+              value: /root/.cache/huggingface
+            # Ungated model: no HF token needed. For gated models, mount a
+            # Secret as HF_TOKEN here.
+          ports:
+            - name: http
+              containerPort: 8000
+          resources:
+            requests:
+              cpu: "2"
+              memory: 6Gi
+              nvidia.com/gpu: 1
+            limits:
+              memory: 12Gi
+              nvidia.com/gpu: 1
+          # (3) Probes tuned for a slow-starting model server.
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 10
+            failureThreshold: 90      # 15 minutes of grace for download + load
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 10
+            failureThreshold: 6
+          volumeMounts:
+            # (4) PyTorch needs real shared memory; the container default is 64 MB.
+            - name: shm
+              mountPath: /dev/shm
+            - name: hf-cache
+              mountPath: /root/.cache/huggingface
+      volumes:
+        - name: shm
+          emptyDir:
+            medium: Memory
+            sizeLimit: 2Gi
+        # (5) Model weights land here (~3 GB for this model). Ephemeral: every
+        # new pod downloads again. Module 4 step 6 covers the alternatives.
+        - name: hf-cache
+          emptyDir:
+            sizeLimit: 20Gi

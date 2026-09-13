@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="520" viewBox="0 0 1040 520" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="14">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#9ca3af"/></marker></defs>
+<rect width="1040" height="520" fill="#ffffff"/>
+<text x="520" y="34" font-size="18" fill="#1f2937" font-weight="700" text-anchor="middle">Four ways to hand a GPU to pods</text>
+<rect x="30" y="70" width="240" height="400" rx="8" fill="#ffffff" stroke="#6b7280" stroke-width="2"/>
+<text x="150.0" y="100" font-size="17" fill="#6b7280" font-weight="700" text-anchor="middle">Exclusive</text>
+<text x="150.0" y="120" font-size="12" fill="#6b7280" font-weight="normal" text-anchor="middle">1 pod : 1 GPU</text>
+<rect x="60" y="140" width="180" height="90" rx="6" fill="#111827" stroke="#4b5563" stroke-width="1.5"/>
+<rect x="68" y="148" width="164" height="74" rx="4" fill="#76b900" stroke="#76b900" stroke-width="1.5"/>
+<text x="150.0" y="190.0" font-size="12" fill="#ffffff" font-weight="600" text-anchor="middle">pod A</text>
+<text x="48" y="280" font-size="12.5" fill="#1f2937" font-weight="normal" text-anchor="start">• Full isolation</text>
+<text x="48" y="302" font-size="12.5" fill="#1f2937" font-weight="normal" text-anchor="start">• Predictable latency</text>
+<text x="48" y="324" font-size="12.5" fill="#1f2937" font-weight="normal" text-anchor="start">• Idle capacity = waste</text>
+<text x="48" y="346" font-size="12.5" fill="#1f2937" font-weight="normal" text-anchor="start">• Any GPU</text>
+<rect x="42" y="392" width="216" height="62" rx="6" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+<text x="150.0" y="414" font-size="11.5" fill="#6b7280" font-weight="600" text-anchor="middle">Default. Latency-critical</text>
+<text x="150.0" y="430" font-size="11.5" fill="#6b7280" font-weight="600" text-anchor="middle">serving.</text>
+<rect x="285" y="70" width="240" height="400" rx="8" fill="#ffffff" stroke="#d97706" stroke-width="2"/>
+<text x="405.0" y="100" font-size="17" fill="#d97706" font-weight="700" text-anchor="middle">Time-slicing</text>
+<text x="405.0" y="120" font-size="12" fill="#6b7280" font-weight="normal" text-anchor="middle">N pods : 1 GPU, round-robin</text>
+<rect x="315" y="140" width="180" height="90" rx="6" fill="#111827" stroke="#4b5563" stroke-width="1.5"/>
+<rect x="325.0" y="148" width="37.0" height="74" rx="3" fill="#76b900" stroke="#a3e635" stroke-width="1.5" stroke-dasharray="3,2"/>
+<text x="343.5" y="189.0" font-size="11" fill="#ffffff" font-weight="normal" text-anchor="middle">t</text>
+<rect x="366.0" y="148" width="37.0" height="74" rx="3" fill="#76b900" stroke="#a3e635" stroke-width="1.5" stroke-dasharray="3,2"/>
+<text x="384.5" y="189.0" font-size="11" fill="#ffffff" font-weight="normal" text-anchor="middle">t</text>
+<rect x="407.0" y="148" width="37.0" height="74" rx="3" fill="#76b900" stroke="#a3e635" stroke-width="1.5" stroke-dasharray="3,2"/>
+<text x="425.5" y="189.0" font-size="11" fill="#ffffff" font-weight="normal" text-anchor="middle">t</text>
+<rect x="448.0" y="148" width="37.0" height="74" rx="3" fill="#76b900" stroke="#a3e635" stroke-width="1.5" stroke-dasharray="3,2"/>
+<text x="466.5" y="189.0" font-size="11" fill="#ffffff" font-weight="normal" text-anchor="middle">t</text>
+<text x="405.0" y="246" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="middle">same memory, shared in time</text>
+<text x="303" y="280" font-size="12.5" fill="#1f2937" font-weight="normal" text-anchor="start">• No memory isolation</text>
+<text x="303" y="302" font-size="12.5" fill="#1f2937" font-weight="normal" text-anchor="start">• No fault isolation</text>
+<text x="303" y="324" font-size="12.5" fill="#1f2937" font-weight="normal" text-anchor="start">• Context-switch overhead → p99</text>
+<text x="303" y="346" font-size="12.5" fill="#1f2937" font-weight="normal" text-anchor="start">• Any GPU (A10G/L4 OK)</text>
+<rect x="297" y="392" width="216" height="62" rx="6" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+<text x="405.0" y="414" font-size="11.5" fill="#d97706" font-weight="600" text-anchor="middle">Dev/test, bursty low-priority</text>
+<text x="405.0" y="430" font-size="11.5" fill="#d97706" font-weight="600" text-anchor="middle">inference. Lab today.</text>
+<rect x="540" y="70" width="240" height="400" rx="8" fill="#ffffff" stroke="#059669" stroke-width="2"/>
+<text x="660.0" y="100" font-size="17" fill="#059669" font-weight="700" text-anchor="middle">MIG</text>
+<text x="660.0" y="120" font-size="12" fill="#6b7280" font-weight="normal" text-anchor="middle">Up to 7 hardware slices</text>
+<rect x="570" y="140" width="180" height="90" rx="6" fill="#111827" stroke="#4b5563" stroke-width="1.5"/>
+<rect x="579.0" y="148" width="21.428571428571427" height="74" rx="2" fill="#76b900" stroke="#111827" stroke-width="2"/>
+<rect x="602.4285714285714" y="148" width="21.428571428571427" height="74" rx="2" fill="#76b900" stroke="#111827" stroke-width="2"/>
+<rect x="625.8571428571429" y="148" width="21.428571428571427" height="74" rx="2" fill="#76b900" stroke="#111827" stroke-width="2"/>
+<rect x="649.2857142857142" y="148" width="21.428571428571427" height="74" rx="2" fill="#76b900" stroke="#111827" stroke-width="2"/>
+<rect x="672.7142857142857" y="148" width="21.428571428571427" height="74" rx="2" fill="#76b900" stroke="#111827" stroke-width="2"/>
+<rect x="696.1428571428571" y="148" width="21.428571428571427" height="74" rx="2" fill="#76b900" stroke="#111827" stroke-width="2"/>
+<rect x="719.5714285714286" y="148" width="21.428571428571427" height="74" rx="2" fill="#76b900" stroke="#111827" stroke-width="2"/>
+<text x="660.0" y="246" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="middle">hardware-partitioned memory + SMs</text>
+<text x="558" y="280" font-size="12.5" fill="#1f2937" font-weight="normal" text-anchor="start">• Memory + fault isolation</text>
+<text x="558" y="302" font-size="12.5" fill="#1f2937" font-weight="normal" text-anchor="start">• Guaranteed SM/bandwidth share</text>
+<text x="558" y="324" font-size="12.5" fill="#1f2937" font-weight="normal" text-anchor="start">• Fixed profiles (1g.10gb…)</text>
+<text x="558" y="346" font-size="12.5" fill="#1f2937" font-weight="normal" text-anchor="start">• A100 / H100 / H200 / B200 only</text>
+<rect x="552" y="392" width="216" height="62" rx="6" fill="#ecfdf5" stroke="#059669" stroke-width="1.5"/>
+<text x="660.0" y="414" font-size="11.5" fill="#059669" font-weight="600" text-anchor="middle">Multi-tenant SLO-bound</text>
+<text x="660.0" y="430" font-size="11.5" fill="#059669" font-weight="600" text-anchor="middle">serving. Slides only (g5/g6</text>
+<text x="660.0" y="446" font-size="11.5" fill="#059669" font-weight="600" text-anchor="middle">can't).</text>
+<rect x="795" y="70" width="240" height="400" rx="8" fill="#ffffff" stroke="#2563eb" stroke-width="2"/>
+<text x="915.0" y="100" font-size="17" fill="#2563eb" font-weight="700" text-anchor="middle">MPS</text>
+<text x="915.0" y="120" font-size="12" fill="#6b7280" font-weight="normal" text-anchor="middle">CUDA-level concurrency</text>
+<rect x="825" y="140" width="180" height="90" rx="6" fill="#111827" stroke="#4b5563" stroke-width="1.5"/>
+<rect x="833" y="148" width="164" height="74" rx="4" fill="#76b900" stroke="#76b900" stroke-width="1.5"/>
+<text x="855" y="190.0" font-size="12" fill="#ffffff" font-weight="600" text-anchor="middle">k1</text>
+<text x="915" y="190.0" font-size="12" fill="#ffffff" font-weight="600" text-anchor="middle">k2</text>
+<text x="975" y="190.0" font-size="12" fill="#ffffff" font-weight="600" text-anchor="middle">k3</text>
+<text x="915.0" y="246" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="middle">kernels interleave on one context</text>
+<text x="813" y="280" font-size="12.5" fill="#1f2937" font-weight="normal" text-anchor="start">• Shared address space</text>
+<text x="813" y="302" font-size="12.5" fill="#1f2937" font-weight="normal" text-anchor="start">• Lower overhead than slicing</text>
+<text x="813" y="324" font-size="12.5" fill="#1f2937" font-weight="normal" text-anchor="start">• Experimental in device plugin</text>
+<text x="813" y="346" font-size="12.5" fill="#1f2937" font-weight="normal" text-anchor="start">• Any GPU</text>
+<rect x="807" y="392" width="216" height="62" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+<text x="915.0" y="414" font-size="11.5" fill="#2563eb" font-weight="600" text-anchor="middle">Many small kernels from</text>
+<text x="915.0" y="430" font-size="11.5" fill="#2563eb" font-weight="600" text-anchor="middle">trusted clients.</text>
+</svg>

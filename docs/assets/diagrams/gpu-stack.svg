@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="560" viewBox="0 0 980 560" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="14">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#9ca3af"/></marker></defs>
+<rect width="980" height="560" fill="#ffffff"/>
+<text x="490" y="34" font-size="18" fill="#1f2937" font-weight="700" text-anchor="middle">The GPU stack on Kubernetes, bottom-up: who provides each layer on EKS</text>
+<rect x="40" y="70" width="600" height="58" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+<text x="56" y="94" font-size="15" fill="#1f2937" font-weight="700" text-anchor="start">Your Pod</text>
+<text x="56" y="114" font-size="12" fill="#6b7280" font-weight="normal" text-anchor="start">resources.limits: nvidia.com/gpu: 1</text>
+<rect x="660" y="80" width="290" height="38" rx="19" fill="#ffffff" stroke="#2563eb" stroke-width="1.5"/>
+<text x="805" y="104" font-size="12.5" fill="#2563eb" font-weight="600" text-anchor="middle">You</text>
+<rect x="40" y="136" width="600" height="58" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+<text x="56" y="160" font-size="15" fill="#1f2937" font-weight="700" text-anchor="start">kube-scheduler</text>
+<text x="56" y="180" font-size="12" fill="#6b7280" font-weight="normal" text-anchor="start">places the pod on a node whose allocatable nvidia.com/gpu ≥ 1</text>
+<rect x="660" y="146" width="290" height="38" rx="19" fill="#ffffff" stroke="#6b7280" stroke-width="1.5"/>
+<text x="805" y="170" font-size="12.5" fill="#6b7280" font-weight="600" text-anchor="middle">Kubernetes</text>
+<rect x="40" y="202" width="600" height="58" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+<text x="56" y="226" font-size="15" fill="#1f2937" font-weight="700" text-anchor="start">kubelet extended resource</text>
+<text x="56" y="246" font-size="12" fill="#6b7280" font-weight="normal" text-anchor="start">nvidia.com/gpu advertised in node capacity / allocatable (integers only)</text>
+<rect x="660" y="212" width="290" height="38" rx="19" fill="#ffffff" stroke="#6b7280" stroke-width="1.5"/>
+<text x="805" y="236" font-size="12.5" fill="#6b7280" font-weight="600" text-anchor="middle">Device plugin registers it</text>
+<rect x="40" y="268" width="600" height="58" rx="8" fill="#ecfdf5" stroke="#059669" stroke-width="1.5"/>
+<text x="56" y="292" font-size="15" fill="#1f2937" font-weight="700" text-anchor="start">NVIDIA device plugin (+ GFD, DCGM exporter)</text>
+<text x="56" y="312" font-size="12" fill="#6b7280" font-weight="normal" text-anchor="start">discovers GPUs, mounts /dev/nvidia*, labels the node, exports metrics</text>
+<rect x="660" y="278" width="290" height="38" rx="19" fill="#ffffff" stroke="#059669" stroke-width="1.5"/>
+<text x="805" y="302" font-size="12.5" fill="#059669" font-weight="600" text-anchor="middle">NVIDIA GPU Operator  ← you install this</text>
+<rect x="40" y="334" width="600" height="58" rx="8" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+<text x="56" y="358" font-size="15" fill="#1f2937" font-weight="700" text-anchor="start">NVIDIA Container Toolkit</text>
+<text x="56" y="378" font-size="12" fill="#6b7280" font-weight="normal" text-anchor="start">containerd runtime hook that injects the GPU into the container</text>
+<rect x="660" y="344" width="290" height="38" rx="19" fill="#ffffff" stroke="#d97706" stroke-width="1.5"/>
+<text x="805" y="368" font-size="12.5" fill="#d97706" font-weight="600" text-anchor="middle">EKS AL2023 NVIDIA AMI (pre-installed)</text>
+<rect x="40" y="400" width="600" height="58" rx="8" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+<text x="56" y="424" font-size="15" fill="#1f2937" font-weight="700" text-anchor="start">NVIDIA kernel driver + CUDA user-mode driver</text>
+<text x="56" y="444" font-size="12" fill="#6b7280" font-weight="normal" text-anchor="start">kernel module talking to the PCIe device; must match the CUDA version your image expects</text>
+<rect x="660" y="410" width="290" height="38" rx="19" fill="#ffffff" stroke="#d97706" stroke-width="1.5"/>
+<text x="805" y="434" font-size="12.5" fill="#d97706" font-weight="600" text-anchor="middle">EKS AL2023 NVIDIA AMI (pre-installed)</text>
+<rect x="40" y="466" width="600" height="58" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+<text x="56" y="490" font-size="15" fill="#1f2937" font-weight="700" text-anchor="start">GPU hardware</text>
+<text x="56" y="510" font-size="12" fill="#6b7280" font-weight="normal" text-anchor="start">A10G (g5) · L4 (g6) · L40S (g6e) · H100 (p5)</text>
+<rect x="660" y="476" width="290" height="38" rx="19" fill="#ffffff" stroke="#6b7280" stroke-width="1.5"/>
+<text x="805" y="500" font-size="12.5" fill="#6b7280" font-weight="600" text-anchor="middle">EC2 via Karpenter</text>
+<line x1="26" y1="165.0" x2="26" y2="103.0" stroke="#9ca3af" stroke-width="1.8" marker-end="url(#arrow)"/>
+<line x1="26" y1="231.0" x2="26" y2="169.0" stroke="#9ca3af" stroke-width="1.8" marker-end="url(#arrow)"/>
+<line x1="26" y1="297.0" x2="26" y2="235.0" stroke="#9ca3af" stroke-width="1.8" marker-end="url(#arrow)"/>
+<line x1="26" y1="363.0" x2="26" y2="301.0" stroke="#9ca3af" stroke-width="1.8" marker-end="url(#arrow)"/>
+<line x1="26" y1="429.0" x2="26" y2="367.0" stroke="#9ca3af" stroke-width="1.8" marker-end="url(#arrow)"/>
+<line x1="26" y1="495.0" x2="26" y2="433.0" stroke="#9ca3af" stroke-width="1.8" marker-end="url(#arrow)"/>
+<text transform="rotate(-90 20 300)" x="20" y="300" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="middle">a request flows up</text>
+<text x="490" y="540" font-size="13" fill="#6b7280" font-weight="normal" text-anchor="middle">Rule of thumb: the AMI owns everything below the container boundary; the Operator owns everything Kubernetes sees.</text>
+</svg>

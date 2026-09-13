@@ -1,0 +1,436 @@
+{
+  "title": "GPU Workshop: vLLM serving",
+  "uid": "gpu-workshop-vllm",
+  "tags": [
+    "gpu-workshop",
+    "vllm"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "editable": true,
+  "refresh": "10s",
+  "time": {
+    "from": "now-30m",
+    "to": "now"
+  },
+  "templating": {
+    "list": []
+  },
+  "annotations": {
+    "list": []
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "vLLM replicas",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "count(vllm:num_requests_running{model_name=\"qwen2.5-1.5b\"})"
+        }
+      ],
+      "description": "One series per replica scraped by the PodMonitor."
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Requests in flight",
+      "gridPos": {
+        "x": 6,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(vllm:num_requests_running{model_name=\"qwen2.5-1.5b\"}) + sum(vllm:num_requests_waiting{model_name=\"qwen2.5-1.5b\"})"
+        }
+      ],
+      "description": "running + waiting. This is what the KEDA ScaledObject scales on."
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Generation throughput",
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate(vllm:generation_tokens_total{model_name=\"qwen2.5-1.5b\"}[1m]))"
+        }
+      ],
+      "description": "Output tokens per second across all replicas."
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "KV-cache usage",
+      "gridPos": {
+        "x": 18,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "avg(vllm:kv_cache_usage_perc{model_name=\"qwen2.5-1.5b\"})"
+        }
+      ],
+      "description": "1.0 = the KV cache is full; requests will queue."
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "Requests: running vs waiting (per replica)",
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 12
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "vllm:num_requests_running{model_name=\"qwen2.5-1.5b\"}",
+          "legendFormat": "running {{pod}}"
+        },
+        {
+          "refId": "B",
+          "expr": "vllm:num_requests_waiting{model_name=\"qwen2.5-1.5b\"}",
+          "legendFormat": "waiting {{pod}}"
+        }
+      ],
+      "description": "Waiting > 0 means --max-num-seqs is saturated on that replica."
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "Latency p95: time to first token / end-to-end",
+      "gridPos": {
+        "x": 12,
+        "y": 4,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 12
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "histogram_quantile(0.95, sum(rate(vllm:time_to_first_token_seconds_bucket{model_name=\"qwen2.5-1.5b\"}[2m])) by (le))",
+          "legendFormat": "TTFT p95"
+        },
+        {
+          "refId": "B",
+          "expr": "histogram_quantile(0.95, sum(rate(vllm:e2e_request_latency_seconds_bucket{model_name=\"qwen2.5-1.5b\"}[2m])) by (le))",
+          "legendFormat": "E2E p95"
+        },
+        {
+          "refId": "C",
+          "expr": "histogram_quantile(0.50, sum(rate(vllm:e2e_request_latency_seconds_bucket{model_name=\"qwen2.5-1.5b\"}[2m])) by (le))",
+          "legendFormat": "E2E p50"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "type": "timeseries",
+      "title": "GPU utilization by node (DCGM)",
+      "gridPos": {
+        "x": 0,
+        "y": 12,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 12
+          },
+          "max": 100,
+          "min": 0
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "avg by (Hostname) (DCGM_FI_DEV_GPU_UTIL)",
+          "legendFormat": "{{Hostname}}"
+        }
+      ],
+      "description": "DCGM_FI_DEV_GPU_UTIL. A GPU node sitting near 0% with a pod on it is money on fire."
+    },
+    {
+      "id": 8,
+      "type": "timeseries",
+      "title": "GPU memory used by node (DCGM)",
+      "gridPos": {
+        "x": 12,
+        "y": 12,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "decmbytes",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 12
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "avg by (Hostname) (DCGM_FI_DEV_FB_USED)",
+          "legendFormat": "{{Hostname}}"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "type": "timeseries",
+      "title": "GPU pod attribution (DCGM)",
+      "gridPos": {
+        "x": 0,
+        "y": 20,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 12
+          },
+          "max": 100,
+          "min": 0
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "DCGM_FI_DEV_GPU_UTIL{pod!=\"\"}",
+          "legendFormat": "{{namespace}}/{{pod}}"
+        }
+      ],
+      "description": "Per-pod GPU utilization. Empty for time-sliced nodes: DCGM cannot attribute a shared GPU to containers."
+    },
+    {
+      "id": 10,
+      "type": "timeseries",
+      "title": "Tokens/s per replica",
+      "gridPos": {
+        "x": 12,
+        "y": 20,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 12
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "rate(vllm:generation_tokens_total{model_name=\"qwen2.5-1.5b\"}[1m])",
+          "legendFormat": "gen {{pod}}"
+        },
+        {
+          "refId": "B",
+          "expr": "rate(vllm:prompt_tokens_total{model_name=\"qwen2.5-1.5b\"}[1m])",
+          "legendFormat": "prompt {{pod}}"
+        }
+      ]
+    }
+  ]
+}

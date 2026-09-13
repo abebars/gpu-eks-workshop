@@ -1,0 +1,48 @@
+# Four small GPU workloads. On an exclusive node only one could run; on a
+# 4-way time-sliced node they all land on the same GPU. Each one runs a
+# matmul loop so nvidia-smi shows four busy processes.
+#
+# It reuses the vLLM image (already on the node thanks to the pre-pull
+# DaemonSet) purely because it has PyTorch + CUDA in it. No extra pull.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shared-load
+  labels:
+    app: shared-load
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: shared-load
+  template:
+    metadata:
+      labels:
+        app: shared-load
+    spec:
+      tolerations:
+        - key: nvidia.com/gpu
+          operator: Exists
+          effect: NoSchedule
+      containers:
+        - name: matmul
+          image: vllm/vllm-openai:v0.28.0
+          # Override the image's "vllm serve" entrypoint.
+          command:
+            - python3
+            - -c
+            - |
+              import torch, time, os
+              name = torch.cuda.get_device_name(0)
+              print(f"pod={os.environ['HOSTNAME']} sees GPU: {name}", flush=True)
+              x = torch.randn(4096, 4096, device="cuda")
+              while True:
+                  y = x @ x
+                  torch.cuda.synchronize()
+          resources:
+            requests:
+              cpu: 250m
+              memory: 1Gi
+            limits:
+              memory: 2Gi
+              nvidia.com/gpu: 1

@@ -1,0 +1,39 @@
+apiVersion: karpenter.k8s.aws/v1
+kind: EC2NodeClass
+metadata:
+  name: gpu
+spec:
+  # IAM role NAME (not ARN) that GPU nodes assume. Created by the base stack.
+  role: ${KARPENTER_NODE_ROLE}
+
+  # PINNED AMI. The alias resolves to the EKS-optimized AL2023 AMI for this
+  # cluster's Kubernetes version, and because the instance types below carry
+  # a GPU, Karpenter picks the *NVIDIA* variant (driver + container toolkit
+  # baked in). Never use "al2023@latest" for a GPU fleet: a new AMI release
+  # would drift and recycle every GPU node, and a driver bump can break
+  # workloads that were built against the old CUDA driver.
+  amiSelectorTerms:
+    - alias: al2023@${AMI_VERSION}
+
+  subnetSelectorTerms:
+    - tags:
+        karpenter.sh/discovery: ${CLUSTER_NAME}
+  securityGroupSelectorTerms:
+    - tags:
+        karpenter.sh/discovery: ${CLUSTER_NAME}
+
+  # Inference images are big (the vLLM image is ~9 GB compressed). Image pull
+  # speed on a fresh node is bounded by EBS throughput, so we buy a bigger,
+  # faster root volume than the 20 GiB default.
+  blockDeviceMappings:
+    - deviceName: /dev/xvda
+      ebs:
+        volumeSize: 200Gi
+        volumeType: gp3
+        iops: 6000
+        throughput: 500
+        encrypted: true
+        deleteOnTermination: true
+
+  tags:
+    workshop: gpu-eks

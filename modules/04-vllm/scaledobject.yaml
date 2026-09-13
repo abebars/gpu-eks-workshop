@@ -1,0 +1,46 @@
+# KEDA ScaledObject: scale the vLLM Deployment on requests in flight.
+#
+# Why "running + waiting" and not just the queue?
+#   vLLM admits up to --max-num-seqs requests into a batch before anything
+#   queues, so "waiting" is 0 until a replica is saturated, then spikes.
+#   In-flight requests per replica is a steadier signal. KV-cache usage is
+#   the other good option for memory-bound models.
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: vllm
+  namespace: vllm
+spec:
+  scaleTargetRef:
+    name: vllm
+  minReplicaCount: 1
+  maxReplicaCount: 2
+  pollingInterval: 15
+  cooldownPeriod: 60
+  advanced:
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleUp:
+          stabilizationWindowSeconds: 0
+          policies:
+            - type: Pods
+              value: 1
+              periodSeconds: 30
+        scaleDown:
+          # 5 minutes: long enough that a replica which is still cold-starting
+          # when the load stops isn't killed before it ever served a request.
+          stabilizationWindowSeconds: 300
+          policies:
+            - type: Pods
+              value: 1
+              periodSeconds: 60
+  triggers:
+    - type: prometheus
+      metricType: AverageValue
+      metadata:
+        serverAddress: http://kube-prometheus-stack-prometheus.monitoring.svc:9090
+        query: |
+          sum(vllm:num_requests_running{model_name="qwen2.5-1.5b"})
+          + sum(vllm:num_requests_waiting{model_name="qwen2.5-1.5b"})
+        # Target 12 in-flight requests per replica. 24 virtual users → 2 replicas.
+        threshold: "12"

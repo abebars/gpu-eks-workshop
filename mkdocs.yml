@@ -1,0 +1,119 @@
+site_name: Engineering GPU Infrastructure for AI Workloads
+site_description: A hands-on workshop — from zero GPUs to serving a real LLM on Amazon EKS with autoscaling, sharing and monitoring.
+site_author: Ahmed Bebars
+site_url: https://abebars.github.io/gpu-eks-workshop/
+repo_url: https://github.com/abebars/gpu-eks-workshop
+repo_name: abebars/gpu-eks-workshop
+edit_uri: edit/main/docs/
+copyright: "© Ahmed Bebars · #LevelUpWithAhmed"
+
+theme:
+  name: material
+  language: en
+  logo: assets/diagrams/gpu-icon.png
+  favicon: assets/diagrams/gpu-icon.png
+  features:
+    - navigation.sections
+    - navigation.indexes
+    - navigation.top
+    - navigation.footer
+    - navigation.tracking
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - search.suggest
+    - search.highlight
+    - toc.follow
+  palette:
+    - scheme: default
+      primary: teal
+      accent: green
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: teal
+      accent: green
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  icon:
+    annotation: material/arrow-right-circle
+    repo: fontawesome/brands/github
+
+extra_css:
+  - assets/css/workshop.css
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - def_list
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.snippets:
+      base_path: [.]
+      check_paths: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.keys
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+nav:
+  - Home: index.md
+  - Before the workshop:
+      - 00-prework/index.md
+      - 1. Request GPU quota: 00-prework/01-quota.md
+      - 2. Install the tools: 00-prework/02-tooling.md
+      - 3. Deploy the base stack: 00-prework/03-base-stack.md
+      - 4. Preflight check: 00-prework/04-preflight.md
+  - "Module 1 · Why GPUs on Kubernetes are hard":
+      - 01-why-gpus-are-hard/index.md
+  - "Module 2 · Lab 1: a GPU-ready EKS cluster":
+      - 02-lab1-gpu-ready-eks/index.md
+      - 2.1 Verify the base stack: 02-lab1-gpu-ready-eks/01-verify.md
+      - 2.2 Create GPU capacity: 02-lab1-gpu-ready-eks/02-nodepool.md
+      - 2.3 Install the GPU Operator: 02-lab1-gpu-ready-eks/03-gpu-operator.md
+      - 2.4 Your first GPU pod: 02-lab1-gpu-ready-eks/04-first-gpu-pod.md
+      - 2.5 Checkpoint: 02-lab1-gpu-ready-eks/05-checkpoint.md
+  - "Module 3 · GPU scheduling & sharing":
+      - 03-scheduling-and-sharing/index.md
+      - 3.1 Warm the image cache: 03-scheduling-and-sharing/01-prepull.md
+      - 3.2 Time-slice a node: 03-scheduling-and-sharing/02-time-slicing.md
+      - 3.3 Four pods, one GPU: 03-scheduling-and-sharing/03-four-pods.md
+      - 3.4 The fifth pod: 03-scheduling-and-sharing/04-fifth-pod.md
+      - 3.5 Reset for Lab 2: 03-scheduling-and-sharing/05-reset.md
+  - "Module 4 · Lab 2: serving a real model":
+      - 04-lab2-serving-a-model/index.md
+      - 4.1 Deploy vLLM: 04-lab2-serving-a-model/01-deploy.md
+      - 4.2 Walk the manifest: 04-lab2-serving-a-model/02-manifest.md
+      - 4.3 Smoke test: 04-lab2-serving-a-model/03-smoke-test.md
+      - 4.4 Load test: 04-lab2-serving-a-model/04-load-test.md
+      - 4.5 Autoscale: 04-lab2-serving-a-model/05-autoscale.md
+      - 4.6 Cold start, live: 04-lab2-serving-a-model/06-cold-start.md
+  - "Module 5 · Observability & cost":
+      - 05-observability-and-cost/index.md
+      - 5.1 Open the dashboards: 05-observability-and-cost/01-dashboards.md
+      - 5.2 Find the idle GPU: 05-observability-and-cost/02-idle-gpu.md
+      - 5.3 Cost levers: 05-observability-and-cost/03-cost-levers.md
+  - "Module 6 · Wrap-up":
+      - 06-wrap-up/index.md
+      - Production checklist: 06-wrap-up/checklist.md
+      - Where to go next: 06-wrap-up/resources.md
+  - Clean up: cleanup.md
+  - Troubleshooting: troubleshooting.md

@@ -1,0 +1,69 @@
+apiVersion: karpenter.sh/v1
+kind: NodePool
+metadata:
+  name: gpu
+spec:
+  template:
+    metadata:
+      labels:
+        workshop.abebars.io/pool: gpu
+    spec:
+      nodeClassRef:
+        group: karpenter.k8s.aws
+        kind: EC2NodeClass
+        name: gpu
+
+      requirements:
+        - key: kubernetes.io/arch
+          operator: In
+          values: ["amd64"]
+        - key: kubernetes.io/os
+          operator: In
+          values: ["linux"]
+        # Spot first, On-Demand as the fallback. Karpenter prefers spot when
+        # both are allowed and falls back within milliseconds when EC2
+        # reports insufficient capacity.
+        - key: karpenter.sh/capacity-type
+          operator: In
+          values: ["spot", "on-demand"]
+        # Diversify across two GPU families (A10G and L4) and two sizes.
+        # A single instance type is how you get "InsufficientInstanceCapacity".
+        - key: karpenter.k8s.aws/instance-family
+          operator: In
+          values: ["g5", "g6"]
+        - key: karpenter.k8s.aws/instance-size
+          operator: In
+          values: ["xlarge", "2xlarge"]
+        # Exactly one GPU per node keeps the labs predictable.
+        - key: karpenter.k8s.aws/instance-gpu-count
+          operator: In
+          values: ["1"]
+
+      # Nothing lands on a GPU node unless it explicitly tolerates this taint.
+      # CPU-only workloads must never consume a $1/hour node.
+      taints:
+        - key: nvidia.com/gpu
+          value: present
+          effect: NoSchedule
+
+      # Default node lifetime. Long-lived GPU nodes accumulate driver drift;
+      # 30 days is a reasonable ceiling in production.
+      expireAfter: 720h
+
+  # Hard ceiling on what this pool may provision. Protects your bill if a
+  # runaway Deployment asks for 50 replicas. Karpenter counts what nodes
+  # ADVERTISE, so a node time-sliced 4 ways (Module 3) consumes 4 of these.
+  # Physical peak today is 3 GPUs; 6 leaves room for one sliced node.
+  limits:
+    nvidia.com/gpu: "6"
+
+  disruption:
+    # WhenEmpty only. WhenEmptyOrUnderutilized would let Karpenter replace a
+    # running inference node with a "cheaper" one, killing your model server
+    # mid-request. For GPU fleets, be deliberate about disruption.
+    consolidationPolicy: WhenEmpty
+    # Workshop setting so an idle node survives the break and the talks.
+    # Production: minutes, not hours. Module 5 tightens this live.
+    consolidateAfter: 2h
+    budgets:
+      - nodes: "1"

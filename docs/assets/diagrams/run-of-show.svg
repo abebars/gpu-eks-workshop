@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="340" viewBox="0 0 1300 340" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="14">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#9ca3af"/></marker></defs>
+<rect width="1300" height="340" fill="#ffffff"/>
+<text x="650" y="30" font-size="18" fill="#1f2937" font-weight="700" text-anchor="middle">Run of show — 3 h 30 min</text>
+<rect x="50.0" y="100" width="24.906976744186046" height="70" rx="6" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+<text x="62.45348837209302" y="139" font-size="11.5" fill="#6b7280" font-weight="600" text-anchor="middle">Go</text>
+<text x="54.0" y="190" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="start">5 min</text>
+<rect x="77.90697674418604" y="100" width="108.62790697674419" height="70" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+<text x="132.22093023255815" y="123" font-size="11.5" fill="#2563eb" font-weight="600" text-anchor="middle">M1</text>
+<text x="132.22093023255815" y="139" font-size="11.5" fill="#2563eb" font-weight="600" text-anchor="middle">Why GPUs</text>
+<text x="132.22093023255815" y="155" font-size="11.5" fill="#2563eb" font-weight="600" text-anchor="middle">are hard</text>
+<text x="81.90697674418604" y="190" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="start">20 min</text>
+<rect x="189.53488372093022" y="100" width="276.06976744186045" height="70" rx="6" fill="#ecfdf5" stroke="#059669" stroke-width="1.5"/>
+<text x="327.56976744186045" y="131" font-size="11.5" fill="#059669" font-weight="600" text-anchor="middle">M2 · Lab 1</text>
+<text x="327.56976744186045" y="147" font-size="11.5" fill="#059669" font-weight="600" text-anchor="middle">GPU-ready EKS</text>
+<text x="193.53488372093022" y="190" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="start">50 min</text>
+<rect x="468.60465116279073" y="100" width="52.81395348837209" height="70" rx="6" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+<text x="495.01162790697674" y="139" font-size="11.5" fill="#6b7280" font-weight="600" text-anchor="middle">Break</text>
+<text x="472.60465116279073" y="190" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="start">10 min</text>
+<rect x="524.4186046511628" y="100" width="220.25581395348837" height="70" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+<text x="634.546511627907" y="123" font-size="11.5" fill="#2563eb" font-weight="600" text-anchor="middle">M3</text>
+<text x="634.546511627907" y="139" font-size="11.5" fill="#2563eb" font-weight="600" text-anchor="middle">Scheduling</text>
+<text x="634.546511627907" y="155" font-size="11.5" fill="#2563eb" font-weight="600" text-anchor="middle">&amp; sharing</text>
+<text x="528.4186046511628" y="190" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="start">40 min</text>
+<rect x="747.6744186046512" y="100" width="276.06976744186045" height="70" rx="6" fill="#ecfdf5" stroke="#059669" stroke-width="1.5"/>
+<text x="885.7093023255815" y="131" font-size="11.5" fill="#059669" font-weight="600" text-anchor="middle">M4 · Lab 2</text>
+<text x="885.7093023255815" y="147" font-size="11.5" fill="#059669" font-weight="600" text-anchor="middle">Serve a real model</text>
+<text x="751.6744186046512" y="190" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="start">50 min</text>
+<rect x="1026.7441860465117" y="100" width="136.53488372093022" height="70" rx="6" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+<text x="1095.0116279069769" y="123" font-size="11.5" fill="#d97706" font-weight="600" text-anchor="middle">M5</text>
+<text x="1095.0116279069769" y="139" font-size="11.5" fill="#d97706" font-weight="600" text-anchor="middle">Observability</text>
+<text x="1095.0116279069769" y="155" font-size="11.5" fill="#d97706" font-weight="600" text-anchor="middle">&amp; cost</text>
+<text x="1030.7441860465117" y="190" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="start">25 min</text>
+<rect x="1166.2790697674418" y="100" width="80.72093023255815" height="70" rx="6" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+<text x="1206.639534883721" y="131" font-size="11.5" fill="#6b7280" font-weight="600" text-anchor="middle">M6</text>
+<text x="1206.639534883721" y="147" font-size="11.5" fill="#6b7280" font-weight="600" text-anchor="middle">Wrap-up</text>
+<text x="1170.2790697674418" y="190" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="start">15 min</text>
+<line x1="50" y1="210" x2="1250.0" y2="210" stroke="#9ca3af" stroke-width="1.5"/>
+<line x1="50.0" y1="210" x2="50.0" y2="216" stroke="#9ca3af" stroke-width="1.5"/>
+<text x="50.0" y="230" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="middle">0:00</text>
+<line x1="217.4418604651163" y1="210" x2="217.4418604651163" y2="216" stroke="#9ca3af" stroke-width="1.5"/>
+<text x="217.4418604651163" y="230" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="middle">0:30</text>
+<line x1="384.8837209302326" y1="210" x2="384.8837209302326" y2="216" stroke="#9ca3af" stroke-width="1.5"/>
+<text x="384.8837209302326" y="230" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="middle">1:00</text>
+<line x1="552.3255813953489" y1="210" x2="552.3255813953489" y2="216" stroke="#9ca3af" stroke-width="1.5"/>
+<text x="552.3255813953489" y="230" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="middle">1:30</text>
+<line x1="719.7674418604652" y1="210" x2="719.7674418604652" y2="216" stroke="#9ca3af" stroke-width="1.5"/>
+<text x="719.7674418604652" y="230" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="middle">2:00</text>
+<line x1="887.2093023255815" y1="210" x2="887.2093023255815" y2="216" stroke="#9ca3af" stroke-width="1.5"/>
+<text x="887.2093023255815" y="230" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="middle">2:30</text>
+<line x1="1054.6511627906978" y1="210" x2="1054.6511627906978" y2="216" stroke="#9ca3af" stroke-width="1.5"/>
+<text x="1054.6511627906978" y="230" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="middle">3:00</text>
+<line x1="1222.093023255814" y1="210" x2="1222.093023255814" y2="216" stroke="#9ca3af" stroke-width="1.5"/>
+<text x="1222.093023255814" y="230" font-size="11" fill="#6b7280" font-weight="normal" text-anchor="middle">3:30</text>
+<line x1="429.5348837209302" y1="92" x2="429.5348837209302" y2="170" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,3"/>
+<text x="429.5348837209302" y="86" font-size="10.5" fill="#dc2626" font-weight="600" text-anchor="middle">Checkpoint 1: nvidia-smi on screen</text>
+<line x1="730.9302325581396" y1="78" x2="730.9302325581396" y2="170" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,3"/>
+<text x="730.9302325581396" y="72" font-size="10.5" fill="#dc2626" font-weight="600" text-anchor="middle">Checkpoint 2: 4 pods on 1 GPU</text>
+<line x1="809.0697674418604" y1="92" x2="809.0697674418604" y2="170" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,3"/>
+<text x="809.0697674418604" y="86" font-size="10.5" fill="#dc2626" font-weight="600" text-anchor="middle">Checkpoint 3: a completion from your endpoint</text>
+<text x="650" y="300" font-size="12" fill="#6b7280" font-weight="normal" text-anchor="middle">Checkpoints 1 and 3 are hard gates: nobody moves on without the artifact on screen. TAs sweep during the buffer built into each lab.</text>
+</svg>
